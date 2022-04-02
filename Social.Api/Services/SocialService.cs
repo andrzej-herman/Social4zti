@@ -1,4 +1,5 @@
 ﻿using Social.Common.Entities;
+using Social.Common.Models;
 
 namespace Social.Api.Services
 {
@@ -8,15 +9,28 @@ namespace Social.Api.Services
         private List<Like> _likes = new List<Like>();
         private List<Comment> _comments = new List<Comment>();
 
-        public string AddNewPost()
+        public Post AddNewPost(AddPostModel model)
         {
-            _posts.Add(post);
+            var post = new Post
+            {
+                PostId = Guid.NewGuid().ToString().Replace("-", ""),
+                Title = model.Title,
+                Text = model.Text,
+                ImageUrl = model.ImageUrl,
+                IsPublic = model.IsPublic,
+                DateAdd = DateTime.Now,
+                AuthorId = model.AuthorId,
+                AuthorName = model.AuthorName,
+            };
 
+            _posts.Add(post);
+            return post;
         }
 
-        public IEnumerable<Post> GetPublicPosts()
+        public IEnumerable<Post> GetPosts()
         {
-            var posts = _posts.Where(p => p.IsPublic);
+            List<Post> posts = new List<Post>();
+            posts = _posts.Where(p => p.IsPublic).OrderByDescending(p => p.DateAdd).ToList();
             foreach (var post in posts)
             {
                 post.Likes = _likes.Where(l => l.PostId == post.PostId).ToList(); 
