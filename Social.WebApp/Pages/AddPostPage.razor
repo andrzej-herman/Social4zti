@@ -1,0 +1,53 @@
+﻿@page "/addpost"
+@using Social.Common.Models
+<PageTitle>SanBook</PageTitle>
+<h1>Napisz post</h1>
+
+<RadzenTemplateForm Data="@model" Submit="@((AddPostModel args) => { Submit(args); })">
+
+     <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <RadzenLabel Text="Tytuł" />
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <RadzenTextBox style="width: 100%;" Name="Tytuł" @bind-Value="@model.Title"/>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-12 col-lg-12">
+            <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Info">Zapisz</RadzenButton>
+        </div>
+    </div>
+
+</RadzenTemplateForm>
+
+
+@*        //public string Title { get; set; }
+
+        //[Required(ErrorMessage = "Proszę podać treść posta")]
+        //public string Text { get; set; }
+
+        //public string ImageUrl { get; set; }
+
+        //[Required]
+        //public bool IsPublic { get; set; }
+
+        //[Required]
+        //public string AuthorId { get; set; }
+
+        //[Required]
+        //public string AuthorName { get; set; }
+*@
+
+
+
+@code {
+    private AddPostModel model = new AddPostModel();
+
+    void Submit(AddPostModel arg)
+    {
+        var test = model;
+    }
+
+}

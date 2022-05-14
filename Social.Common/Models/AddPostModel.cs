@@ -13,6 +13,7 @@ namespace Social.Common.Models
 
         [Required(ErrorMessage = "Proszę podać treść posta")]
         public string Text { get; set; }
+
         public string ImageUrl { get; set; }
 
         [Required]

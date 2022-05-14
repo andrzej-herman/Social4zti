@@ -17,11 +17,10 @@ namespace Social.Api.Controllers
 
         [HttpGet]
         [Route("posts")]
-        public IEnumerable<Post> GetPosts()
+        public IEnumerable<Post> GetPostsAsync()
         {
-            return _service.GetPosts();
+            return  _service.GetPosts();
         }
-
 
         [HttpPost]
         [Route("posts")]
@@ -29,7 +28,5 @@ namespace Social.Api.Controllers
         {
             return _service.AddNewPost(model);
         }
-
-
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Social.Common.Entities;
 using Social.Common.Models;
+using Blazored.LocalStorage;
+using Newtonsoft.Json;
 
 namespace Social.Api.Services
 {
@@ -8,6 +10,8 @@ namespace Social.Api.Services
         private List<Post> _posts = new List<Post>();
         private List<Like> _likes = new List<Like>();
         private List<Comment> _comments = new List<Comment>();
+
+
 
         public Post AddNewPost(AddPostModel model)
         {
