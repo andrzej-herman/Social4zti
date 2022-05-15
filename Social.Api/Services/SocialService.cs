@@ -1,47 +1,53 @@
-﻿using Social.Common.Entities;
-using Social.Common.Models;
-using Blazored.LocalStorage;
-using Newtonsoft.Json;
+﻿
+using System.Xml;
+using Social.Api.Database;
+using Social.Api.Repository;
+using Social.Common.Dtos;
 
 namespace Social.Api.Services
 {
     public class SocialService : ISocialService
     {
-        private List<Post> _posts = new List<Post>();
-        private List<Like> _likes = new List<Like>();
-        private List<Comment> _comments = new List<Comment>();
+        private readonly ISocialRepository _repo;
 
-
-
-        public Post AddNewPost(AddPostModel model)
+        public SocialService(ISocialRepository repo)
         {
-            var post = new Post
+            _repo = repo;
+        }
+        
+        
+        public IEnumerable<PostDto> GetPosts()
+        {
+            return _repo.GetPosts().Select(p => new PostDto()
             {
-                PostId = Guid.NewGuid().ToString().Replace("-", ""),
-                Title = model.Title,
-                Text = model.Text,
-                ImageUrl = model.ImageUrl,
-                IsPublic = model.IsPublic,
-                DateAdd = DateTime.Now,
-                AuthorId = model.AuthorId,
-                AuthorName = model.AuthorName,
-            };
-
-            _posts.Add(post);
-            return post;
+                PostId = p.PostId,
+                UserId = p.UserId,
+                DateCreated = p.DateCreated,
+                PostText = p.PostText,
+                Title = p.Title,
+                ImageUrl = p.ImageUrl,
+                Author =  $"{p.User.FirstName} {p.User.LastName}"
+            });
         }
 
-        public IEnumerable<Post> GetPosts()
+        public ResultDto AddPost(AddPostDto dto)
         {
-            List<Post> posts = new List<Post>();
-            posts = _posts.Where(p => p.IsPublic).OrderByDescending(p => p.DateAdd).ToList();
-            foreach (var post in posts)
+            var post = new SocialPost()
             {
-                post.Likes = _likes.Where(l => l.PostId == post.PostId).ToList(); 
-                post.Comments = _comments.Where(l => l.PostId == post.PostId).ToList();
-            }
+                UserId = dto.UserId,
+                DateCreated = DateTime.Now,
+                Title = dto.Title,
+                PostText = dto.PostText,
+                ImageUrl = dto.ImageUrl
+            };
 
-            return posts;   
+            var value = _repo.AddPost(post);
+            return value != 0 ? 
+                new ResultDto() {Result = true, Description = "Post został dodany"} 
+                : new ResultDto() {Result = false, 
+                    Description = "Wystąpił problem z dodaniem posta, spróbuj później"};
+
         }
     }
 }
+

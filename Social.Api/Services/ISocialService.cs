@@ -1,11 +1,11 @@
-﻿using Social.Common.Entities;
-using Social.Common.Models;
+﻿using Social.Api.Database;
+using Social.Common.Dtos;
 
 namespace Social.Api.Services
 {
     public interface ISocialService
     {
-        IEnumerable<Post> GetPosts();
-        Post AddNewPost(AddPostModel model);
+        IEnumerable<PostDto> GetPosts();
+        ResultDto AddPost(AddPostDto dto);
     }
 }

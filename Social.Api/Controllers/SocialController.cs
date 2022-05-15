@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Social.Api.Services;
-using Social.Common.Entities;
-using Social.Common.Models;
+using Social.Common.Dtos;
 
 namespace Social.Api.Controllers
 {
@@ -9,24 +8,24 @@ namespace Social.Api.Controllers
     public class SocialController : ControllerBase
     {
         private readonly ISocialService _service;
-
+        
         public SocialController(ISocialService service)
         {
             _service = service;
         }
-
+        
         [HttpGet]
         [Route("posts")]
-        public IEnumerable<Post> GetPostsAsync()
+        public IEnumerable<PostDto> GetPosts()
         {
-            return  _service.GetPosts();
+            return _service.GetPosts();
         }
-
+        
         [HttpPost]
         [Route("posts")]
-        public Post AddPost(AddPostModel model)
+        public ResultDto AddPost(AddPostDto dto)
         {
-            return _service.AddNewPost(model);
+            return _service.AddPost(dto);
         }
     }
 }
