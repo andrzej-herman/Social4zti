@@ -1,53 +1,81 @@
 ﻿@page "/addpost"
-@using Social.Common.Models
+@inject NotificationService notificationService
+@inject HttpClient httpClient
+
 <PageTitle>SanBook</PageTitle>
 <h1>Napisz post</h1>
-
-<RadzenTemplateForm Data="@model" Submit="@((AddPostModel args) => { Submit(args); })">
 
      <div class="row">
         <div class="col-md-6 col-lg-6">
             <RadzenLabel Text="Tytuł" />
+            <RadzenTextBox style="width: 100%;" @bind-Value="@model.Title"/>
         </div>
+    </div>
+    
+     <div class="row mt-3">
         <div class="col-md-6 col-lg-6">
-            <RadzenTextBox style="width: 100%;" Name="Tytuł" @bind-Value="@model.Title"/>
+            <RadzenLabel Text="Treść posta" />
+            <RadzenTextArea style="width: 100%;" @bind-Value="@model.PostText"/>
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-md-12 col-lg-12">
-            <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Info">Zapisz</RadzenButton>
+            <RadzenButton ButtonStyle="ButtonStyle.Primary" Click="Save">Zapisz</RadzenButton>
         </div>
     </div>
 
-</RadzenTemplateForm>
 
 
-@*        //public string Title { get; set; }
-
-        //[Required(ErrorMessage = "Proszę podać treść posta")]
-        //public string Text { get; set; }
-
-        //public string ImageUrl { get; set; }
-
-        //[Required]
-        //public bool IsPublic { get; set; }
-
-        //[Required]
-        //public string AuthorId { get; set; }
-
-        //[Required]
-        //public string AuthorName { get; set; }
-*@
 
 
 
 @code {
-    private AddPostModel model = new AddPostModel();
+    private AddPostDto model = new AddPostDto();
 
-    void Submit(AddPostModel arg)
+    async Task Save()
     {
-        var test = model;
+        model.UserId = 1;
+        model.ImageUrl = "https://picsum.photos/800/600";
+        if (string.IsNullOrWhiteSpace(model.PostText))
+        {
+            Rezultat(false, "Proszę podać treść posta");
+            return;
+        }
+        try
+        {
+            var adddres = $"{httpClient.BaseAddress}posts";
+            var response = await httpClient.PostAsJsonAsync<AddPostDto>(adddres, model);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var odpowiedz = JsonConvert.DeserializeObject<ResultDto>(json);
+                if (odpowiedz.Result)
+                {
+                    Rezultat(true, odpowiedz.Description);
+                    model = new AddPostDto();
+                }          
+                else
+                    Rezultat(false, odpowiedz.Description);
+            }
+            else
+                Rezultat(false, "Nie można zapisać posta spróbuj później");
+        }
+        catch (Exception ex)
+        {
+            Rezultat(false, ex.Message);
+        }
+    }
+
+    void Rezultat(bool wynik, string text)
+    {
+        var message = new NotificationMessage()
+        {
+            Severity = wynik ? NotificationSeverity.Success : NotificationSeverity.Error,
+            Summary = "",
+            Detail = text
+        };
+        notificationService.Notify(message);
     }
 
 }
