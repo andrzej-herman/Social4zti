@@ -1,4 +1,46 @@
 ﻿@page "/"
+@inject HttpClient httpClient
 <PageTitle>SanBook</PageTitle>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="post-container">
+                @if (posts != null)
+                {
+                    @if (posts.Any())
+                    {
+                        foreach (var post in posts)
+                        {
+                            <PostComponent Post=@post/>
+                        }
+                    }
+                    else
+                    {
+                        <p>Nie masz nic do wyświetlenia</p>
+                    }
+                }
+                else
+                {
+                    <p>Trwa pobieranie listy postów ...</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    IEnumerable<PostDto> posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var address = $"{httpClient.BaseAddress}posts";
+        var json = await httpClient.GetStringAsync(address);
+        posts = JsonConvert.DeserializeObject<IEnumerable<PostDto>>(json).OrderByDescending(p => p.DateCreated);
+    }
+
+}
+
+
 
 

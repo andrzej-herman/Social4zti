@@ -1,0 +1,46 @@
+﻿<div class="post">
+    <div class="post-header">
+        <Avatar Initials="@Post.Initials"/>
+        <div class="author-date">
+            <div class="author">@Post.Author</div>
+            <div class="date">@DisplayDate(Post.DateCreated)</div>
+        </div>
+    </div>
+    <div class="post-content">
+        @if (Post.Title != null)
+        {
+            <b>@Post.Title</b>
+        }
+        <div style="margin-top: 10px">
+            @Post.PostText
+        </div>
+    </div>
+    <div class="post-image">
+        <img src="@Post.ImageUrl" alt="@Post.PostText" class="post-image-image"/>
+    </div>
+    
+</div>
+
+@code {
+    [Parameter]
+    public PostDto Post { get; set; }
+
+    private string DisplayDate(DateTime date)
+    {
+        var teraz = DateTime.Now;
+        if (date.Year == teraz.Year && date.Month == teraz.Month && date.Day == teraz.Day)
+            return $"{date.Hour}:{date.Minute}";
+        else
+            return date.ToString("dd.MM.yyyy");
+    }
+
+}
+
+
+@*    //public int PostId { get; set; }
+    //public int UserId { get; set; }
+    //public string Author { get; set; }
+    //public DateTime DateCreated { get; set; }
+    //public string Title { get; set; }
+    //public string PostText { get; set; }
+    //public string ImageUrl { get; set; }*@

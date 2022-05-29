@@ -9,4 +9,5 @@ public class PostDto
     public string Title { get; set; }
     public string PostText { get; set; }
     public string ImageUrl { get; set; }
+    public string Initials { get; set; }
 }

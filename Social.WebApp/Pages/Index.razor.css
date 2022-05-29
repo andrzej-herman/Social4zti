@@ -1,0 +1,8 @@
+﻿.post-container {
+   padding-top: 25px;
+   padding-bottom: 25px;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   flex-direction: column;
+}

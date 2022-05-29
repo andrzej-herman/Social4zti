@@ -26,7 +26,8 @@ namespace Social.Api.Services
                 PostText = p.PostText,
                 Title = p.Title,
                 ImageUrl = p.ImageUrl,
-                Author =  $"{p.User.FirstName} {p.User.LastName}"
+                Author =  $"{p.User.FirstName} {p.User.LastName}",
+                Initials = $"{p.User.FirstName[..1].ToUpper()}{p.User.LastName[..1].ToUpper()}"
             });
         }
 

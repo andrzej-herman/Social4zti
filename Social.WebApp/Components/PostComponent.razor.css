@@ -1,0 +1,46 @@
+﻿.post {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 15px 20px 0px 20px;
+}
+
+.author-date {
+    display: block;
+}
+
+.author {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.date {
+    font-size: 14px;
+    color: dimgray;
+}
+
+.post-content {
+    padding: 20px 20px 0px 20px;
+}
+
+.post-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    padding: 10px 0px 0px 0px;
+}
+
+.post-image-image {
+    max-width: 100%;
+    max-height: auto;
+    width: 100%;
+    height: auto;
+}
